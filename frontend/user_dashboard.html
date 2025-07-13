@@ -403,7 +403,7 @@
     <div class="sidebar">
         <h2>Support</h2>
         
-        <button class="create-ticket-btn">
+        <button class="create-ticket-btn" onclick="window.location.href='create.html'">
             ➕ Create New Ticket
         </button>
 
@@ -687,9 +687,9 @@
         });
 
         // Create ticket button
-        document.querySelector('.create-ticket-btn').addEventListener('click', function() {
-            alert('Create ticket form would open here');
-        });
+        // document.querySelector('.create-ticket-btn').addEventListener('click', function() {
+        //     alert('Create ticket form would open here');
+        // });
 
         // Search functionality
         const searchInput = document.querySelector('.search-input');
