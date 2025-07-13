@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Talk To Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            border-right: 1px solid #e1e5e9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+
+        .create-ticket-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .create-ticket-btn:hover {
+            background: #1565c0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-bottom: auto;
+        }
+
+        .sidebar-item {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #6c757d;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .sidebar-link.active {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .sidebar-icon {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .user-profile {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            margin-right: 12px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .search-bar {
+            background: #fff;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-icon {
+            margin-right: 8px;
+            color: #6c757d;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6c757d;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .tab.active {
+            color: #1976d2;
+            font-weight: 600;
+        }
+
+        .tab-underline {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background: #1976d2;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e1e5e9;
+            overflow: hidden;
+        }
+
+        .faq-section {
+            padding: 20px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #f3f4f6;
+            padding: 20px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question:hover {
+            color: #1976d2;
+        }
+
+        .faq-answer {
+            color: #6c757d;
+            line-height: 1.5;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.show {
+            max-height: 200px;
+        }
+
+        .tickets-table {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e1e5e9;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .table-row {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 16px;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .table-row:hover {
+            background: #f8f9fa;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .subject {
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .status.open {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status.resolved {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .priority {
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .priority.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority.low {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .created-date {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .contact-section {
+            padding: 20px;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #e1e5e9;
+        }
+
+        .contact-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .contact-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .contact-info {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Support</h2>
+        
+        <button class="create-ticket-btn">
+            ➕ Create New Ticket
+        </button>
+
+        <ul class="sidebar-menu">
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link active" data-section="faq">
+                    <span class="sidebar-icon">❓</span>
+                    Commonly Asked Questions
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link" data-section="tickets">
+                    <span class="sidebar-icon">🎫</span>
+                    Your Tickets
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link" data-section="contact">
+                    <span class="sidebar-icon">📞</span>
+                    Contact Us
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link" data-section="downloads">
+                    <span class="sidebar-icon">📥</span>
+                    Downloads
+                </a>
+            </li>
+        </ul>
+
+        <div class="user-profile">
+            <div class="user-avatar">U</div>
+            <div class="user-info">
+                <div class="user-name">User Name</div>
+                <div class="user-email">user@example.com</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title" id="page-title">Commonly Asked Questions</h1>
+        </div>
+
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search...">
+        </div>
+
+        <!-- FAQ Section -->
+        <div id="faq-section" class="content-section faq-section">
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I reset my password?
+                    <span>⌄</span>
+                </div>
+                <div class="faq-answer">
+                    To reset your password, click on the "Forgot Password" link on the login page. Enter your email address and we'll send you a reset link. Follow the instructions in the email to create a new password.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How can I update my profile information?
+                    <span>⌄</span>
+                </div>
+                <div class="faq-answer">
+                    Go to your account settings by clicking on your profile icon in the top right corner. From there, you can edit your personal information, contact details, and preferences.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    What payment methods do you accept?
+                    <span>⌄</span>
+                </div>
+                <div class="faq-answer">
+                    We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers. For enterprise customers, we also offer invoice-based billing.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I cancel my subscription?
+                    <span>⌄</span>
+                </div>
+                <div class="faq-answer">
+                    You can cancel your subscription at any time from your account settings. Go to the "Billing" section and click "Cancel Subscription". Your access will continue until the end of your current billing period.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tickets Section -->
+        <div id="tickets-section" class="content-section tickets-table hidden">
+            <div class="tabs">
+                <button class="tab active" data-filter="all">All Tickets</button>
+                <button class="tab" data-filter="open">Open</button>
+                <button class="tab" data-filter="resolved">Resolved</button>
+                <div class="tab-underline"></div>
+            </div>
+            
+            <div class="table-header">
+                <div>Subject</div>
+                <div>Status</div>
+                <div>Priority</div>
+                <div>Created</div>
+            </div>
+            
+            <div id="tickets-container">
+                <div class="table-row" data-status="open">
+                    <div class="subject">Cannot access my account</div>
+                    <div class="status open">Open</div>
+                    <div class="priority high">High</div>
+                    <div class="created-date">2 days ago</div>
+                </div>
+                
+                <div class="table-row" data-status="pending">
+                    <div class="subject">Billing question about my invoice</div>
+                    <div class="status pending">Pending</div>
+                    <div class="priority medium">Medium</div>
+                    <div class="created-date">1 week ago</div>
+                </div>
+                
+                <div class="table-row" data-status="resolved">
+                    <div class="subject">Feature request for dark mode</div>
+                    <div class="status resolved">Resolved</div>
+                    <div class="priority low">Low</div>
+                    <div class="created-date">2 weeks ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact-section" class="content-section contact-section hidden">
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-title">Email Support</div>
+                    <div class="contact-info">support@talktous.com<br>Response within 24 hours</div>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-title">Live Chat</div>
+                    <div class="contact-info">Available 24/7<br>Instant responses</div>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-title">Phone Support</div>
+                    <div class="contact-info">+1 (555) 123-4567<br>Mon-Fri 9AM-6PM EST</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Downloads Section -->
+        <div id="downloads-section" class="content-section faq-section hidden">
+            <div class="faq-item">
+                <div class="faq-question">
+                    Mobile App
+                    <span>📱</span>
+                </div>
+                <div class="faq-answer">
+                    Download our mobile app for iOS and Android to manage your tickets on the go. Available on App Store and Google Play Store.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Desktop Client
+                    <span>💻</span>
+                </div>
+                <div class="faq-answer">
+                    Get the desktop application for Windows, Mac, and Linux. Enhanced features for power users including offline access and advanced notifications.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    API Documentation
+                    <span>📚</span>
+                </div>
+                <div class="faq-answer">
+                    Access our comprehensive API documentation and SDK for developers. Build custom integrations and automate your workflow.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Section switching functionality
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const sections = document.querySelectorAll('.content-section');
+        const pageTitle = document.getElementById('page-title');
+        
+        const sectionTitles = {
+            'faq': 'Commonly Asked Questions',
+            'tickets': 'Your Tickets',
+            'contact': 'Contact Us',
+            'downloads': 'Downloads'
+        };
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all sections
+                sections.forEach(section => section.classList.add('hidden'));
+                
+                // Show selected section
+                const sectionId = this.dataset.section + '-section';
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+                
+                // Update page title
+                pageTitle.textContent = sectionTitles[this.dataset.section];
+            });
+        });
+
+        // FAQ accordion functionality
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const arrow = this.querySelector('span');
+                
+                if (answer.classList.contains('show')) {
+                    answer.classList.remove('show');
+                    arrow.textContent = '⌄';
+                } else {
+                    answer.classList.add('show');
+                    arrow.textContent = '⌃';
+                }
+            });
+        });
+
+        // Ticket tabs functionality
+        const ticketTabs = document.querySelectorAll('#tickets-section .tab');
+        const ticketUnderline = document.querySelector('#tickets-section .tab-underline');
+        
+        function updateTicketUnderline(activeTab) {
+            const rect = activeTab.getBoundingClientRect();
+            const tabsRect = activeTab.parentElement.getBoundingClientRect();
+            
+            ticketUnderline.style.left = (rect.left - tabsRect.left) + 'px';
+            ticketUnderline.style.width = rect.width + 'px';
+        }
+
+        ticketTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                ticketTabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Update underline position
+                updateTicketUnderline(this);
+                
+                // Filter tickets
+                const filter = this.dataset.filter;
+                const ticketRows = document.querySelectorAll('#tickets-container .table-row');
+                
+                ticketRows.forEach(row => {
+                    const status = row.dataset.status;
+                    if (filter === 'all' || status === filter) {
+                        row.style.display = 'grid';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Create ticket button
+        document.querySelector('.create-ticket-btn').addEventListener('click', function() {
+            alert('Create ticket form would open here');
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const activeSection = document.querySelector('.content-section:not(.hidden)');
+            
+            if (activeSection.id === 'faq-section') {
+                const faqItems = activeSection.querySelectorAll('.faq-item');
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            } else if (activeSection.id === 'tickets-section') {
+                const ticketRows = activeSection.querySelectorAll('.table-row');
+                ticketRows.forEach(row => {
+                    const subject = row.querySelector('.subject').textContent.toLowerCase();
+                    
+                    if (subject.includes(searchTerm)) {
+                        row.style.display = 'grid';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Initialize ticket underline
+        setTimeout(() => {
+            const activeTicketTab = document.querySelector('#tickets-section .tab.active');
+            if (activeTicketTab) {
+                updateTicketUnderline(activeTicketTab);
+            }
+        }, 100);
+    </script>
+</body>
+</html>

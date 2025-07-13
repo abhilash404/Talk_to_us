@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            border-right: 1px solid #e1e5e9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-bottom: auto;
+        }
+
+        .sidebar-item {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #6c757d;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .sidebar-link.active {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .sidebar-icon {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .new-conversation {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #fff;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .new-conversation:hover {
+            background: #f8f9fa;
+            border-color: #d1d5db;
+        }
+
+        .agent-profile {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            margin-right: 12px;
+        }
+
+        .agent-info {
+            flex: 1;
+        }
+
+        .agent-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .agent-role {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .search-bar {
+            background: #fff;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-icon {
+            margin-right: 8px;
+            color: #6c757d;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6c757d;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .tab.active {
+            color: #1976d2;
+            font-weight: 600;
+        }
+
+        .tab-underline {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background: #1976d2;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .tickets-table {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e1e5e9;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr 1fr 1.5fr 1fr;
+            gap: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .table-row {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr 1fr 1.5fr 1fr;
+            gap: 16px;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .table-row:hover {
+            background: #f8f9fa;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .subject {
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .customer {
+            color: #6c757d;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .status.open {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status.ongoing {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority {
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .priority.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority.low {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .assigned-to {
+            color: #6c757d;
+        }
+
+        .last-updated {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Support</h2>
+        <ul class="sidebar-menu">
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link active">
+                    <span class="sidebar-icon">📥</span>
+                    Inbox
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <span class="sidebar-icon">💤</span>
+                    Snoozed
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <span class="sidebar-icon">✅</span>
+                    Done
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <span class="sidebar-icon">🛡️</span>
+                    Spam
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <span class="sidebar-icon">🗑️</span>
+                    Trash
+                </a>
+            </li>
+        </ul>
+        
+        <a href="#" class="new-conversation">
+            <span class="sidebar-icon">➕</span>
+            New conversation
+        </a>
+
+        <div class="agent-profile">
+            <div class="agent-avatar">M</div>
+            <div class="agent-info">
+                <div class="agent-name">Manish</div>
+                <div class="agent-role">Support Agent</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search">
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="all">All</button>
+            <button class="tab" data-tab="unassigned">Unassigned</button>
+            <button class="tab" data-tab="assigned">Assigned</button>
+            <div class="tab-underline"></div>
+        </div>
+
+        <div class="tickets-table">
+            <div class="table-header">
+                <div>Subject</div>
+                <div>Customer</div>
+                <div>Status</div>
+                <div>Priority</div>
+                <div>Assigned to</div>
+                <div>Last updated</div>
+            </div>
+            
+            <div id="tickets-container">
+                <div class="table-row" data-status="assigned">
+                    <div class="subject">Issue with order #98765</div>
+                    <div class="customer">Sophia Clark</div>
+                    <div class="status open">Open</div>
+                    <div class="priority high">High</div>
+                    <div class="assigned-to">Ethan Carter</div>
+                    <div class="last-updated">2 hours ago</div>
+                </div>
+                
+                <div class="table-row" data-status="assigned">
+                    <div class="subject">Paisa nahi mila</div>
+                    <div class="customer">Abhilash</div>
+                    <div class="status ongoing">Ongoing</div>
+                    <div class="priority low">Low</div>
+                    <div class="assigned-to">Yuvraj Biswal</div>
+                    <div class="last-updated">2 hours ago</div>
+                </div>
+
+                <div class="table-row" data-status="unassigned">
+                    <div class="subject">Account verification issue</div>
+                    <div class="customer">Priya Sharma</div>
+                    <div class="status open">Open</div>
+                    <div class="priority high">High</div>
+                    <div class="assigned-to">-</div>
+                    <div class="last-updated">1 hour ago</div>
+                </div>
+
+                <div class="table-row" data-status="unassigned">
+                    <div class="subject">Password reset not working</div>
+                    <div class="customer">Rajesh Kumar</div>
+                    <div class="status open">Open</div>
+                    <div class="priority low">Low</div>
+                    <div class="assigned-to">-</div>
+                    <div class="last-updated">30 minutes ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabUnderline = document.querySelector('.tab-underline');
+        const ticketsContainer = document.getElementById('tickets-container');
+        
+        // Sample ticket data
+        const allTickets = [
+            {
+                subject: "Issue with order #98765",
+                customer: "Sophia Clark",
+                status: "open",
+                priority: "high",
+                assignedTo: "Ethan Carter",
+                lastUpdated: "2 hours ago",
+                type: "assigned"
+            },
+            {
+                subject: "Paisa nahi mila",
+                customer: "Abhilash",
+                status: "ongoing",
+                priority: "low",
+                assignedTo: "Yuvraj Biswal",
+                lastUpdated: "2 hours ago",
+                type: "assigned"
+            },
+            {
+                subject: "Account verification issue",
+                customer: "Priya Sharma",
+                status: "open",
+                priority: "high",
+                assignedTo: "-",
+                lastUpdated: "1 hour ago",
+                type: "unassigned"
+            },
+            {
+                subject: "Password reset not working",
+                customer: "Rajesh Kumar",
+                status: "open",
+                priority: "low",
+                assignedTo: "-",
+                lastUpdated: "30 minutes ago",
+                type: "unassigned"
+            }
+        ];
+
+        function updateUnderline(activeTab) {
+            const rect = activeTab.getBoundingClientRect();
+            const tabsRect = activeTab.parentElement.getBoundingClientRect();
+            
+            tabUnderline.style.left = (rect.left - tabsRect.left) + 'px';
+            tabUnderline.style.width = rect.width + 'px';
+        }
+
+        function renderTickets(filter = 'all') {
+            let filteredTickets = allTickets;
+            
+            if (filter === 'assigned') {
+                filteredTickets = allTickets.filter(ticket => ticket.type === 'assigned');
+            } else if (filter === 'unassigned') {
+                filteredTickets = allTickets.filter(ticket => ticket.type === 'unassigned');
+            }
+            
+            if (filteredTickets.length === 0) {
+                ticketsContainer.innerHTML = '<div class="empty-state">No tickets found</div>';
+                return;
+            }
+            
+            ticketsContainer.innerHTML = filteredTickets.map(ticket => `
+                <div class="table-row" data-status="${ticket.type}">
+                    <div class="subject">${ticket.subject}</div>
+                    <div class="customer">${ticket.customer}</div>
+                    <div class="status ${ticket.status}">${ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}</div>
+                    <div class="priority ${ticket.priority}">${ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)}</div>
+                    <div class="assigned-to">${ticket.assignedTo}</div>
+                    <div class="last-updated">${ticket.lastUpdated}</div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize underline position
+        const activeTab = document.querySelector('.tab.active');
+        updateUnderline(activeTab);
+
+        // Tab click handlers
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Update underline position
+                updateUnderline(this);
+                
+                // Filter tickets based on tab
+                const tabType = this.dataset.tab;
+                renderTickets(tabType);
+            });
+        });
+
+        // Sidebar navigation
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.table-row');
+            
+            rows.forEach(row => {
+                const subject = row.querySelector('.subject').textContent.toLowerCase();
+                const customer = row.querySelector('.customer').textContent.toLowerCase();
+                
+                if (subject.includes(searchTerm) || customer.includes(searchTerm)) {
+                    row.style.display = 'grid';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle window resize for underline position
+        window.addEventListener('resize', function() {
+            const activeTab = document.querySelector('.tab.active');
+            updateUnderline(activeTab);
+        });
+    </script>
+</body>
+</html>

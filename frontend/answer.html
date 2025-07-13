@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Ticket Response</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .ticket-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .ticket-id {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .ticket-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .ticket-meta {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .ticket-description {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+
+        .description-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .description-text {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .attachments-section {
+            margin-top: 20px;
+        }
+
+        .attachments-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .attachment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .attachment-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .attachment-item:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .attachment-preview {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .attachment-icon {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin: 0 auto 10px;
+        }
+
+        .attachment-name {
+            font-size: 12px;
+            color: #666;
+            word-break: break-word;
+        }
+
+        .response-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .response-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .response-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .response-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .response-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Ticket Information -->
+        <div class="ticket-header">
+            <div class="ticket-id">Ticket #TK-2024-001</div>
+            <div class="ticket-title">Unable to access user dashboard after recent update</div>
+            
+            <div class="ticket-meta">
+                <span><strong>Customer:</strong> John Smith</span>
+                <span><strong>Created:</strong> July 13, 2025 at 10:30 AM</span>
+                <span><strong>Priority:</strong> High</span>
+                <span><strong>Status:</strong> <span class="status-badge">Open</span></span>
+            </div>
+
+            <div class="tags">
+                <span class="tag">dashboard</span>
+                <span class="tag">login-issue</span>
+                <span class="tag">urgent</span>
+            </div>
+
+            <div class="ticket-description">
+                <div class="description-label">Description:</div>
+                <div class="description-text">
+                    Hello support team,
+                    
+                    I'm experiencing issues accessing my user dashboard after the recent system update that was deployed yesterday. When I try to log in, I can successfully authenticate, but then I get redirected to a blank page instead of my dashboard.
+                    
+                    I've tried clearing my browser cache and cookies, but the issue persists. I'm using Chrome version 126 on Windows 11. This is affecting my ability to manage my account and access important features.
+                    
+                    Please help resolve this issue as soon as possible as it's impacting my daily workflow.
+                    
+                    Best regards,
+                    John Smith
+                </div>
+            </div>
+
+            <div class="attachments-section">
+                <div class="attachments-title">Attachments (3)</div>
+                <div class="attachment-grid">
+                    <div class="attachment-item" onclick="openModal('screenshot1')">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZjBmMGYwIi8+CjxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjUwIiB5PSI0NSIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiI+U2NyZWVuc2hvdDE8L3RleHQ+Cjwvc3ZnPgo=" alt="Screenshot 1" class="attachment-preview">
+                        <div class="attachment-name">blank_page_error.png</div>
+                    </div>
+                    
+                    <div class="attachment-item" onclick="openModal('screenshot2')">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZjBmMGYwIi8+CjxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjUwIiB5PSI0NSIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiI+U2NyZWVuc2hvdDI8L3RleHQ+Cjwvc3ZnPgo=" alt="Screenshot 2" class="attachment-preview">
+                        <div class="attachment-name">browser_console.png</div>
+                    </div>
+                    
+                    <div class="attachment-item" onclick="openModal('log')">
+                        <div class="attachment-icon">📄</div>
+                        <div class="attachment-name">error_log.txt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Section -->
+        <div class="response-section">
+            <div class="response-title">Agent Response</div>
+            <textarea 
+                class="response-textarea" 
+                placeholder="Type your response to the customer here..."
+                id="responseText"
+            ></textarea>
+            
+            <div class="response-actions">
+                <button class="btn btn-primary" onclick="sendResponse()">Send Response</button>
+                <button class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                <button class="btn btn-success" onclick="resolveTicket()">Resolve Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing attachments -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" class="modal-image" src="" alt="Attachment Preview">
+        </div>
+    </div>
+
+    <script>
+        // Sample response templates
+        const responseTemplates = {
+            investigating: "Hi John,\n\nThank you for reporting this issue. I understand you're unable to access your dashboard after our recent update.\n\nI'm currently investigating this issue and will get back to you with a solution shortly.\n\nBest regards,\nSupport Team",
+            
+            solution: "Hi John,\n\nI've identified the issue with the dashboard access. This was caused by a session handling bug in our recent update.\n\nI've applied a fix to your account. Please try clearing your browser cache one more time and log in again. The issue should now be resolved.\n\nPlease let me know if you continue to experience any problems.\n\nBest regards,\nSupport Team"
+        };
+
+        // Function to open modal with attachment
+        function openModal(attachmentId) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            
+            // Generate different preview images based on attachment
+            if (attachmentId === 'screenshot1') {
+                modalImage.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZmZmIi8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAiIGZpbGw9IiMzNDk4ZGIiLz4KPHR5cGUgeD0iMzAwIiB5PSIzNSIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCI+QXBwbGljYXRpb24gSGVhZGVyPC90ZXh0Pgo8dGV4dCB4PSIzMDAiIHk9IjIwMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyNCI+QmxhbmsgUGFnZSAtIERhc2hib2FyZCBOb3QgTG9hZGluZzwvdGV4dD4KPC9zdmc+Cg==";
+            } else if (attachmentId === 'screenshot2') {
+                modalImage.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMjEyMTIxIi8+Cjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI2YwZjBmMCIgZm9udC1zaXplPSIxNCIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSI+Q29uc29sZTwvdGV4dD4KPHR5cGUgeD0iMTAiIHk9IjYwIiBmaWxsPSIjZWY0NDQ0IiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj5FcnJvcjogRmFpbGVkIHRvIGxvYWQgZGFzaGJvYXJkIGNvbXBvbmVudDwvdGV4dD4KPHR5cGUgeD0iMTAiIHk9IjgwIiBmaWxsPSIjZjM5YzEyIiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj5XYXJuaW5nOiBTZXNzaW9uIHRva2VuIG1heSBiZSBleHBpcmVkPC90ZXh0Pgo8L3N2Zz4K";
+            } else {
+                // For non-image files, show a text preview
+                modalImage.style.display = 'none';
+                modal.querySelector('.modal-content').innerHTML = `
+                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                    <div style="padding: 20px; font-family: monospace; white-space: pre-wrap; background: #f8f9fa; border-radius: 6px;">
+[2025-07-13 10:28:45] ERROR: Dashboard component failed to initialize
+[2025-07-13 10:28:45] ERROR: TypeError: Cannot read property 'data' of undefined
+[2025-07-13 10:28:45] ERROR: at DashboardComponent.render (dashboard.js:142:18)
+[2025-07-13 10:28:45] ERROR: at App.componentDidMount (app.js:28:12)
+[2025-07-13 10:28:46] WARN: Session token validation failed
+[2025-07-13 10:28:46] WARN: Attempting to refresh token...
+[2025-07-13 10:28:46] ERROR: Token refresh failed - user needs to re-authenticate
+                    </div>
+                `;
+                modal.classList.add('active');
+                return;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+            // Reset modal content
+            document.getElementById('modalImage').style.display = 'block';
+        }
+
+        // Function to send response
+        function sendResponse() {
+            const responseText = document.getElementById('responseText').value;
+            if (responseText.trim()) {
+                alert('Response sent successfully!');
+                // Here you would typically send the response to your backend
+                console.log('Sending response:', responseText);
+            } else {
+                alert('Please enter a response before sending.');
+            }
+        }
+
+        // Function to save draft
+        function saveDraft() {
+            const responseText = document.getElementById('responseText').value;
+            if (responseText.trim()) {
+                alert('Draft saved successfully!');
+                console.log('Saving draft:', responseText);
+            } else {
+                alert('Please enter some text to save as draft.');
+            }
+        }
+
+        // Function to resolve ticket
+        function resolveTicket() {
+            const responseText = document.getElementById('responseText').value;
+            if (responseText.trim()) {
+                if (confirm('Are you sure you want to resolve this ticket?')) {
+                    alert('Ticket resolved successfully!');
+                    console.log('Resolving ticket with response:', responseText);
+                    // Update status badge
+                    document.querySelector('.status-badge').textContent = 'Resolved';
+                    document.querySelector('.status-badge').style.background = '#27ae60';
+                }
+            } else {
+                alert('Please enter a response before resolving the ticket.');
+            }
+        }
+
+        // Add quick response buttons
+        function addQuickResponse(type) {
+            const textarea = document.getElementById('responseText');
+            textarea.value = responseTemplates[type] || '';
+            textarea.focus();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Add some quick response buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const responseActions = document.querySelector('.response-actions');
+            const quickButtons = document.createElement('div');
+            quickButtons.style.marginTop = '10px';
+            quickButtons.innerHTML = `
+                <small style="color: #666; margin-right: 10px;">Quick responses:</small>
+                <button class="btn" style="padding: 6px 12px; font-size: 12px; background: #ecf0f1; color: #2c3e50; margin-right: 5px;" onclick="addQuickResponse('investigating')">Investigating</button>
+                <button class="btn" style="padding: 6px 12px; font-size: 12px; background: #ecf0f1; color: #2c3e50;" onclick="addQuickResponse('solution')">Solution</button>
+            `;
+            responseActions.appendChild(quickButtons);
+        });
+    </script>
+</body>
+</html>
