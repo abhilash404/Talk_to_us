@@ -232,5 +232,3 @@ MIT © Abhilash Praharaj
 
 ---
 
-Would you like me to help you add diagrams (e.g., JWT flow or architecture), `.env` support, or generate `openapi.yaml` documentation as well?
-
