@@ -2,10 +2,11 @@
 
 pub mod prelude;
 
-pub mod agent_tags;
-pub mod agents;
-pub mod images;
+pub mod analytics;
+pub mod attachments;
+pub mod messages;
+pub mod replies;
 pub mod tags;
-pub mod ticket_history;
+pub mod ticket_tags;
 pub mod tickets;
 pub mod users;

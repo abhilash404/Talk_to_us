@@ -6,29 +6,29 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "tags")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub tag_id: i32,
+    pub id: i32,
     #[sea_orm(unique)]
     pub name: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::agent_tags::Entity")]
-    AgentTags,
+    #[sea_orm(has_many = "super::ticket_tags::Entity")]
+    TicketTags,
 }
 
-impl Related<super::agent_tags::Entity> for Entity {
+impl Related<super::ticket_tags::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::AgentTags.def()
+        Relation::TicketTags.def()
     }
 }
 
-impl Related<super::agents::Entity> for Entity {
+impl Related<super::tickets::Entity> for Entity {
     fn to() -> RelationDef {
-        super::agent_tags::Relation::Agents.def()
+        super::ticket_tags::Relation::Tickets.def()
     }
     fn via() -> Option<RelationDef> {
-        Some(super::agent_tags::Relation::Tags.def().rev())
+        Some(super::ticket_tags::Relation::Tags.def().rev())
     }
 }
 

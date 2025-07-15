@@ -1,0 +1,15 @@
+E:\MYFOLDER\code\major\backend\target\debug\deps\libbackend-007bb6a1104e9dda.rmeta: src\main.rs src\entities\mod.rs src\entities\prelude.rs src\entities\analytics.rs src\entities\attachments.rs src\entities\messages.rs src\entities\tags.rs src\entities\ticket_tags.rs src\entities\tickets.rs src\entities\users.rs src\handler.rs
+
+E:\MYFOLDER\code\major\backend\target\debug\deps\backend-007bb6a1104e9dda.d: src\main.rs src\entities\mod.rs src\entities\prelude.rs src\entities\analytics.rs src\entities\attachments.rs src\entities\messages.rs src\entities\tags.rs src\entities\ticket_tags.rs src\entities\tickets.rs src\entities\users.rs src\handler.rs
+
+src\main.rs:
+src\entities\mod.rs:
+src\entities\prelude.rs:
+src\entities\analytics.rs:
+src\entities\attachments.rs:
+src\entities\messages.rs:
+src\entities\tags.rs:
+src\entities\ticket_tags.rs:
+src\entities\tickets.rs:
+src\entities\users.rs:
+src\handler.rs:

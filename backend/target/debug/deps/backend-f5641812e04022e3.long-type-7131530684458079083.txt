@@ -1,0 +1,2 @@
+fn(State<Arc<DatabaseConnection>>) -> impl Future<Output = Result<axum::Json<Vec<agents::Model>>, (StatusCode, std::string::String)>> {get_tickets}
+fn(State<Arc<DatabaseConnection>>) -> impl Future<Output = Result<axum::Json<Vec<agents::Model>>, (StatusCode, std::string::String)>> {get_tickets}: Handler<_, _>

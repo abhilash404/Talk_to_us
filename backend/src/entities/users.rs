@@ -6,34 +6,42 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "users")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub user_id: i32,
-    pub name: String,
+    pub id: i32,
+    #[sea_orm(unique)]
+    pub username: String,
     #[sea_orm(unique)]
     pub email: String,
     pub password_hash: String,
     pub role: String,
-    pub phone: Option<String>,
     pub created_at: Option<DateTime>,
     pub updated_at: Option<DateTime>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_one = "super::agents::Entity")]
-    Agents,
-    #[sea_orm(has_many = "super::ticket_history::Entity")]
-    TicketHistory,
+    #[sea_orm(has_many = "super::analytics::Entity")]
+    Analytics,
+    #[sea_orm(has_many = "super::attachments::Entity")]
+    Attachments,
+    #[sea_orm(has_many = "super::messages::Entity")]
+    Messages,
 }
 
-impl Related<super::agents::Entity> for Entity {
+impl Related<super::analytics::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Agents.def()
+        Relation::Analytics.def()
     }
 }
 
-impl Related<super::ticket_history::Entity> for Entity {
+impl Related<super::attachments::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::TicketHistory.def()
+        Relation::Attachments.def()
+    }
+}
+
+impl Related<super::messages::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Messages.def()
     }
 }
 

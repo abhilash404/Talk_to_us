@@ -1,0 +1,2 @@
+impl Future<Output = Result<Vec<<tickets::Entity as sea_orm::EntityTrait>::Model>, sea_orm::DbErr>>
+impl Future<Output = Result<Vec<<tickets::Entity as entity::base_entity::EntityTrait>::Model>, sea_orm::error::DbErr>>
