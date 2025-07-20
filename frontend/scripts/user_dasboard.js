@@ -32,6 +32,8 @@ sidebarLinks.forEach(link => {
         
         // Update page title
         pageTitle.textContent = sectionTitles[this.dataset.section];
+
+        ticket_render();
     });
 });
 // FAQ accordion functionality
@@ -158,3 +160,6 @@ async function loadUserTickets() {
         console.error(err);
     }
 }
+
+
+

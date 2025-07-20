@@ -1,0 +1,2 @@
+fn({type error}, axum::extract::State<Arc<DatabaseConnection>>, axum::Json<Reply>) -> impl Future<Output = impl IntoResponse> {reply_ticket}
+fn({type error}, axum::extract::State<Arc<DatabaseConnection>>, axum::Json<Reply>) -> impl Future<Output = impl IntoResponse> {reply_ticket}: Handler<_, _>

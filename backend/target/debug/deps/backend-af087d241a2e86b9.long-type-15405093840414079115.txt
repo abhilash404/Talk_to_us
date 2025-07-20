@@ -1,0 +1,2 @@
+fn({type error}, axum::extract::Path<i32>, axum::extract::State<Arc<DatabaseConnection>>) -> impl Future<Output = impl IntoResponse> {get_user_ticket_summaries}
+fn({type error}, axum::extract::Path<i32>, axum::extract::State<Arc<DatabaseConnection>>) -> impl Future<Output = impl IntoResponse> {get_user_ticket_summaries}: Handler<_, _>

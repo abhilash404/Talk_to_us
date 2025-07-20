@@ -89,18 +89,28 @@ pub async fn login_handler(
     Json(payload): Json<LoginRequest>,
 ) -> impl IntoResponse {
     // 1. Find user by email
-    let user = users::Entity::find()
+    let found_user = users::Entity::find()
         .filter(users::Column::Email.eq(payload.email.clone()))
         .one(&*db)
-        .await
-        .unwrap();
+        .await;
 
-    let Some(user) = user else {
-        return (StatusCode::UNAUTHORIZED, "Invalid credentials").into_response();
+    let user = match found_user {
+        Ok(Some(user)) => user,
+        Ok(None) => return (StatusCode::UNAUTHORIZED, "Invalid credentials").into_response(),
+        Err(e) => {
+            println!("DB error while checking user: {:?}", e);
+            return (StatusCode::INTERNAL_SERVER_ERROR, "Database error").into_response();
+        }
     };
 
     // 2. Verify password
-    let parsed_hash = PasswordHash::new(&user.password_hash).unwrap();
+    let parsed_hash = match PasswordHash::new(&user.password_hash) {
+        Ok(h) => h,
+        Err(e) => {
+            println!("PasswordHash parsing error: {:?}", e);
+            return (StatusCode::INTERNAL_SERVER_ERROR, "Server error").into_response();
+        }
+    };
     let argon2 = Argon2::default();
 
     if argon2.verify_password(payload.password.as_bytes(), &parsed_hash).is_err() {
@@ -114,15 +124,22 @@ pub async fn login_handler(
         exp: (chrono::Utc::now() + chrono::Duration::hours(24)).timestamp() as usize,
     };
 
-    let token = encode(
+    let token = match encode(
         &Header::default(),
         &claims,
         &EncodingKey::from_secret("your-secret-key".as_ref()),
-    )
-    .unwrap();
+    ) {
+        Ok(token) => token,
+        Err(e) => {
+            println!("JWT encode error: {:?}", e);
+            return (StatusCode::INTERNAL_SERVER_ERROR, "Token creation failed").into_response();
+        }
+    };
 
-    // 4. Return token
-    (StatusCode::OK, Json(serde_json::json!({ "token": token }))).into_response()
+    let role = user.role;
+
+    // 4. Return token and role
+    (StatusCode::OK, Json(serde_json::json!({ "token": token, "role": role}))).into_response()
 }
 
 
@@ -143,12 +160,17 @@ pub async fn register_handler(
     Json(payload): Json<RegisterRequest>,
 ) -> impl IntoResponse {
     // Check if email already exists
-    let user_exists = users::Entity::find()
+    let found_user = users::Entity::find()
         .filter(users::Column::Email.eq(payload.email.clone()))
         .one(&*db)
-        .await
-        .unwrap()
-        .is_some();
+        .await;
+    let user_exists = match found_user {
+        Ok(user) => user.is_some(),
+        Err(e) => {
+            println!("DB error while checking user: {:?}", e);
+            return (StatusCode::INTERNAL_SERVER_ERROR, "Database error").into_response();
+        }
+    };
 
     if user_exists {
         return (StatusCode::CONFLICT, "Email already registered").into_response();
@@ -156,10 +178,15 @@ pub async fn register_handler(
 
     // Hash password
     let salt = SaltString::generate(&mut OsRng);
-    let password_hash = Argon2::default()
+    let password_hash = match Argon2::default()
         .hash_password(payload.password.as_bytes(), &salt)
-        .unwrap()
-        .to_string();
+    {
+        Ok(ph) => ph.to_string(),
+        Err(e) => {
+            println!("Password hash error: {:?}", e);
+            return (StatusCode::INTERNAL_SERVER_ERROR, "Password hash error").into_response();
+        }
+    };
 
     // Save user to database
     let new_user = users::ActiveModel {
@@ -179,6 +206,7 @@ pub async fn register_handler(
             }))).into_response()
         }
         Err(e) => {
+            println!("Failed to register user: {:?}", e);
             (StatusCode::INTERNAL_SERVER_ERROR, format!("Failed to register user: {}", e))
                 .into_response()
         }
