@@ -23,6 +23,9 @@ pub async fn get_tickets(
 }
 
 
+
+
+
 #[derive(serde::Serialize)]
 struct TicketSummary {
     title: String,
@@ -36,7 +39,7 @@ pub async fn get_user_ticket_summaries(
     State(db): State<Arc<DatabaseConnection>>,
 ) -> impl IntoResponse {
     // Allow both "admin" and "agent" roles
-    if let Err(e) = require_role(&AuthenticatedUser(user), &["admin", "agent"]) {
+    if let Err(e) = require_role(&AuthenticatedUser(user), &["admin", "agent","customer"]) {
         return e.into_response();
     }
     match tickets::Entity::find()
